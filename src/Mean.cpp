@@ -1,12 +1,11 @@
-
 #include "Mean.h"
 
 double Mean::calc() {
-    double result;
+    if (getElements().empty())
+        return 0;
+    double result = 0;
     for (auto element : elements) {
         result += element;
     }
-    if (getElements().empty())
-        return 0;
-    return result / getElements().size();
+    return result / static_cast<double>(getElements().size());
 }
