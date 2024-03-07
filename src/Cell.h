@@ -6,20 +6,29 @@
 #include <QtWidgets/QTableWidgetItem>
 
 #include "Subject.h"
-// #include "Formula.h"
+#include "Formula.h"
+#include "Max.h"
+#include "Mean.h"
+#include "Min.h"
+#include "Sum.h"
 
-class Cell : public Subject, public Observer, public QTableWidgetItem {
+class Cell : public QTableWidgetItem, public Subject, public Observer {
     // every cell is both a Subject and an Observer
 public:
 
     // TODO: find how the constructor must be
+    //Cell(double v);
     ~Cell() override = default;
 
     void setValue(double v);
-    const double getValue() const;
+    double getValue() const;
 
     void setCustomValue(bool cv);
-    const bool checkCustomValue() const;
+    bool checkCustomValue() const;
+
+    void selectCells(std::list<std::shared_ptr<Cell>> cs);
+    void addCell(Cell& c);
+    std::list<double> extractValues(std::list<std::shared_ptr<Cell>> cs);
 
     // from subject and observer
 
@@ -30,9 +39,14 @@ public:
 
 private:
     // TODO find QT variables
-    double value;
-    bool customValue; // variable to check if the cell has been modified since its creation
-    std::list<std::shared_ptr<Cell> > cellSelection; // list of shared pointers to involved cells-> I want to be able to do a cell selection
+    // TODO Qstring for saving formula
+    QVariant value;
+    QString formula = nullptr;
+    // double value;
+    bool customValue = false; // variable to check if the cell has been modified since its creation
+    // bool isText; maybe to check if the formula is correct or is only text
+    std::shared_ptr<Formula> formula;
+    std::list<std::shared_ptr<Cell>> cellSelection; // list of shared pointers to involved cells-> I want to be able to do a cell selection
     std::list<Observer *> observers;
 };
 

@@ -13,7 +13,9 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(qt_spreadsheet main.cpp src/Cell.cpp src/Cell.h src/Observer.h src/Subject.h src/Mean.cpp src/Mean.h src/Max.cpp src/Max.h src/Min.cpp src/Min.h src/Sum.cpp src/Sum.h src/Formula.cpp src/Formula.h)
+add_executable(qt_spreadsheet main.cpp src/Cell.cpp src/Cell.h src/Observer.h src/Subject.h src/Mean.cpp src/Mean.h src/Max.cpp src/Max.h src/Min.cpp src/Min.h src/Sum.cpp src/Sum.h src/Formula.cpp src/Formula.h
+        src/Spreadsheet.cpp
+        src/Spreadsheet.h)
 target_link_libraries(qt_spreadsheet
         Qt5::Core
         Qt5::Gui
