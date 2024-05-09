@@ -3,7 +3,7 @@
 
 #include "Formula.h"
 
-class Max: public Formula {
+class Max : public Formula{
 public:
     double calc() override;
 };

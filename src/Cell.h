@@ -16,14 +16,15 @@ class Cell : public QTableWidgetItem, public Subject, public Observer {
     // every cell is both a Subject and an Observer
 public:
     // TODO: find how the constructor must be
-    //Cell(double v);
+    //Cell(): QTableWidgetItem("text", 1) {};
+    Cell(const QString &text = QString());
     ~Cell() override = default;
 
     void setValue(double v);
     double getValue() const;
 
     void setData(int role, const QVariant &value) override;
-    float getData();
+    double getData();
 
     void setCustomValue(bool cv);
     bool checkCustomValue() const;
@@ -32,10 +33,11 @@ public:
     void addCell(Cell& c);
     std::list<double> extractValues(std::list<std::shared_ptr<Cell>>& cs);
 
-    void Cell::setFormula(int fType, std::list<std::shared_ptr<Cell>>& involvedCells, const std::string& f);
-    const std::shared_ptr<Formula>& Cell::getFormula() const ;
-    void Cell::removeFormula();
+    void setFormula(int fType, std::list<std::shared_ptr<Cell>>& involvedCells, const std::string& f);
+    const std::shared_ptr<Formula>& getFormula() const ;
+    void removeFormula();
 
+    virtual void setText(const QString &text);
     // from subject and observer
 
     void notify() override; // virtual is redundant
@@ -46,9 +48,9 @@ public:
 private:
     // TODO find QT variables
     // TODO Qstring for saving formula
-    QVariant value;
+    //QVariant value;
     // QString formula = nullptr;
-    // double value;
+    double value{};
     bool customValue = false; // variable to check if the cell has been modified since its creation
     // bool isText; maybe to check if the formula is correct or is only text
     std::shared_ptr<Formula> formula;

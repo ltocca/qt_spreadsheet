@@ -2,9 +2,13 @@
 
 // Constructor and destructor
 
-/*Cell::Cell(double v) : QTableWidgetItem(){
-    value.setValue(v);
-}*/
+//Cell::Cell() : QTableWidgetItem(){
+  //  setText("");
+//}
+Cell::Cell(const QString &text) : QTableWidgetItem(text){
+    this->setText(text);
+}
+
 
 // Observer and Subject
 
@@ -31,22 +35,39 @@ void Cell::update() {
                 values.push_back(observedCell->getValue());
         }
         formula->setElements(values);
-        setValue(formula->calc());
+        setText(QString::number(formula->calc()));
     }
 }
 
 // getters and setters
 
 double Cell::getValue() const { // not sure if it is correct
-    return value.value<double>();
+    //return value.value<double>();
+    return value;
 }
 
 
+/*
 void Cell::setValue(double v) {
     value.setValue<double>(v);
+    //setText(QString::number(v));
     customValue = true;
     notify(); // need to notify every subscribed cell
 }
+*/
+
+void Cell::setText(const QString &text) {
+    QTableWidgetItem::setText(text);
+    // Attempt to convert the text to a double and update the internal value
+    bool ok;
+    double newValue = text.toDouble(&ok);
+    if (ok) {
+        value = newValue;
+        // Notify observers of the change
+        notify();
+    }
+}
+
 
 bool Cell::checkCustomValue() const {
     return customValue;
@@ -75,30 +96,36 @@ std::list<double> Cell::extractValues(std::list<std::shared_ptr<Cell>>& cs) {
 void Cell::setFormula(int fType, std::list<std::shared_ptr<Cell>>& involvedCells, const std::string& f) {
     removeFormula();
     std::list<double> cellsValues = extractValues(involvedCells);
-
     switch(fType) {
         case 0:
             formula = std::make_shared<Sum>();
             formula->setDefinition(f);
             formula->setElements(cellsValues);
-            setValue(formula->calc());
+            setText(QString::number(formula->calc()));
+
+            //setValue(formula->calc());
             //hasValue = true;
             break;
         case 1:
             formula = std::make_shared<Max>();
             formula->setDefinition(f);
             formula->setElements(cellsValues);
-            setValue(formula->calc());
+            setText(QString::number(formula->calc()));
+            //setValue(formula->calc());
         case 2:
             formula = std::make_shared<Min>();
             formula->setDefinition(f);
             formula->setElements(cellsValues);
-            setValue(formula->calc());
+            setText(QString::number(formula->calc()));
+
+            //setValue(formula->calc());
         case 3:
             formula = std::make_shared<Mean>();
             formula->setDefinition(f);
             formula->setElements(cellsValues);
-            setValue(formula->calc());
+            setText(QString::number(formula->calc()));
+
+            //setValue(formula->calc());
             break;
         default:
             break;
@@ -121,6 +148,6 @@ void Cell::setData(int role, const QVariant &value) {
     notify();
 }
 
-float Cell::getData() {
-    return QTableWidgetItem::data(0).toFloat();
+double Cell::getData() {
+    return QTableWidgetItem::data(0).toDouble();
 }

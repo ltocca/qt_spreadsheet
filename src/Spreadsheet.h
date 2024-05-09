@@ -13,8 +13,19 @@ public:
     const int getRows() const;
     const int getColumns() const;
 
+    void setRows(int r);
+    void setCols (int c);
+
+    void setCellValue(Cell* c, double v);
+    Cell getCell(int r, int c);
+
+    // TODO: write methods to parse and calculate formulas
+
 
 private:
+    static const char CHAR_TO_NUMBER = '0';
+    static const char EMPTY_SPACE = ' ';
+    static const char COMMA = ',';
 };
 
 

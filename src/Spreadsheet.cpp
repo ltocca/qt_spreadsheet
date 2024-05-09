@@ -7,7 +7,7 @@ Spreadsheet::Spreadsheet(int rows, int cols, QWidget *parent): QTableWidget(pare
     setColumnCount(cols);
     for (int i = 0; i<rows; i++) {
         for (int j = 0; j < cols; j++) {
-            Cell *cell = new Cell;
+            Cell *cell = new Cell("");
             this->setItem(i, j, cell);
         }
     }
@@ -18,9 +18,24 @@ void Spreadsheet::setColumnTitle(int colIndex, const QString &title) {
 }
 
 const int Spreadsheet::getRows() const {
-    return rowCount();
+    return this->rowCount();
 }
 
 const int Spreadsheet::getColumns() const {
-    return columnCount();
+    return this->columnCount();
+}
+
+void Spreadsheet::setRows(int r) {
+    setRowCount(r);
+}
+
+void Spreadsheet::setCols(int c) {
+    setColumnCount(c);
+}
+
+void Spreadsheet::setCellValue(Cell *c, double v) {
+    c->setText(QString::number(v));
+}
+
+Cell Spreadsheet::getCell(int r, int c) {
 }

@@ -5,7 +5,6 @@
 
 #include <list>
 #include <string>
-#include "Cell.h"
 
 class Formula{
 public:
