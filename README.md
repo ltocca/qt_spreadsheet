@@ -1,0 +1,1 @@
+Progetto per Laboratorio di Programmazione - Foglio di Calcolo in QT
