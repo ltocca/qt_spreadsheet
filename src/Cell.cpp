@@ -18,6 +18,19 @@ void Cell::setData(const int role, const QVariant &data) {
     notify();
 }
 
+void Cell::setFormula(Formula *formula) {
+    insertedFormula = formula;
+}
+
+Formula * Cell::getFormula() const {
+    return insertedFormula;
+}
+
+void Cell::resetCell(){
+    setData(0,0.00);
+    insertedFormula = nullptr;
+}
+
 void Cell::notify() {
     for (const auto ob:observers)
         ob->update();

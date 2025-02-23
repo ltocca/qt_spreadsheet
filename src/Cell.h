@@ -1,6 +1,7 @@
 #pragma once
 #include "QTableWidget"
 #include "Subject.h"
+#include "Formula.h"
 
 #ifndef CELL_H
 #define CELL_H
@@ -16,6 +17,10 @@ public:
     [[nodiscard]] double getData() const;
     void setData(int role, const QVariant &data) override;
 
+    void setFormula(Formula *formula);
+    [[nodiscard]] Formula *getFormula() const;
+    void resetCell();
+
     void notify() override;
     void subscribe(Observer *o) override;
     void unsubscribe(Observer *o) override;
@@ -23,6 +28,7 @@ public:
 
 private:
     std::list<Observer*> observers;
+    Formula *insertedFormula{nullptr}; // added to eventually track the requested formula object
 };
 
 
