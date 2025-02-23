@@ -16,7 +16,22 @@ find_package(Qt5 COMPONENTS
 add_executable(qt_spreadsheet main.cpp
         src/Observer.h
         src/Subject.h
-)
+        src/Formula.cpp
+        src/Formula.h
+        src/Cell.cpp
+        src/Cell.h
+        src/Max.cpp
+        src/Max.h
+        src/Min.cpp
+        src/Min.h
+        src/Mean.cpp
+        src/Mean.h
+        src/Sum.cpp
+        src/Sum.h
+        src/Spreadsheet.cpp
+        src/Spreadsheet.h
+        src/UserInterface.cpp
+        src/UserInterface.h)
 target_link_libraries(qt_spreadsheet
         Qt5::Core
         Qt5::Gui

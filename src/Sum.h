@@ -1,7 +1,3 @@
-//
-// Created by leo on 13/02/25.
-//
-
 #pragma once
 #include "Formula.h"
 
