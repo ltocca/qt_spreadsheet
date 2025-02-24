@@ -38,8 +38,6 @@ void UserInterface::createCentralWidget()
     QString text = QInputDialog::getText(this, tr("Enter Spreadsheet Dimensions:"), tr("Number of rows and columns (comma-separated, e.g., 10,5):"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
         QStringList coordinates = text.split(",");
-            //int rows = coordinates[0].toInt();
-            //int cols = coordinates[1].toInt();
             spreadsheet = new Spreadsheet(coordinates[0].toInt(), coordinates[1].toInt());
 
         }

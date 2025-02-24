@@ -1,12 +1,12 @@
 #pragma once
 #include "QTableWidget"
 #include "Subject.h"
-#include "Formula.h"
 
 #ifndef CELL_H
 #define CELL_H
 
 
+class Formula; // Forward declaration
 
 class Cell :public Subject, public QTableWidgetItem {
 public:
