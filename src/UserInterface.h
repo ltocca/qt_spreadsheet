@@ -41,6 +41,8 @@ private:
 
     // TODO: Improve onFormulaClicked
 
+    std::list<Cell*> getCoordinates(const QString& text); // handles cells "selection"
+
     void onSumClicked();
     void onMaxClicked();
     void onMinClicked();

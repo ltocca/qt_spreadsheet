@@ -54,18 +54,50 @@ void UserInterface::createCentralWidget()
     layout->addWidget(spreadsheet);
 }
 
-void UserInterface::onSumClicked() {
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01):"), QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty()) {
+std::list<Cell*> UserInterface::getCoordinates(const QString& text) {
+    const QRegularExpression delimiter("[,:]");
+    bool hasComma = text.contains(",");
+    bool hasColon = text.contains(":");
+    std::list<Cell*> cells;
+    if (hasComma && !hasColon) {
         QStringList coordinates = text.split(",");
-        std::list<Cell*> cells;
-
         for (const QString& coord : coordinates) {
             int row = coord[0].digitValue();
             int col = coord[1].digitValue();
             cells.push_back(spreadsheet->getCell(row, col));
         }
+    }
+    else if (!hasComma && hasColon) {
+        QStringList coordinates = text.split(":");
+        if (coordinates.size() == 2 && coordinates[0].size()>=2 && coordinates[1].size()>=2) {
+            int firstRow = coordinates[0][0].digitValue();
+            int firstCol = coordinates[0][1].digitValue();
+            int lastRow = coordinates[1][0].digitValue();
+            int lastCol = coordinates[1][1].digitValue();
+
+            if (firstRow > lastRow || firstCol > lastCol) {
+                // TODO: row and column dimension error handling
+            }
+
+            for (int row = firstRow; row <= lastRow; row++) {
+                for (int col = firstCol; col <= lastCol; col++) {
+                    cells.push_back(spreadsheet->getCell(row, col));
+                }
+            }
+        }
+    }
+    else {
+        // TODO: syntax error handling
+    }
+    return cells;
+
+}
+
+void UserInterface::onSumClicked() {
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
+    if (ok && !text.isEmpty()) {
+        std::list<Cell*> cells = getCoordinates(text);
 
         auto* formula = new Sum(spreadsheet->getSelectedCell());
         for (Cell* cell : cells) {
@@ -77,17 +109,9 @@ void UserInterface::onSumClicked() {
 
 void UserInterface::onMeanClicked() {
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01):"), QLineEdit::Normal, "", &ok);
+    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
-        QStringList coordinates = text.split(",");
-        std::list<Cell*> cells;
-
-        for (const QString& coord : coordinates) {
-            int row = coord[0].digitValue();
-            int col = coord[1].digitValue();
-            cells.push_back(spreadsheet->getCell(row, col));
-        }
-
+        std::list<Cell*> cells = getCoordinates(text);
         auto* formula = new Mean(spreadsheet->getSelectedCell());
         for (Cell* cell : cells) {
             formula->addCell(cell);
@@ -98,17 +122,9 @@ void UserInterface::onMeanClicked() {
 
 void UserInterface::onMaxClicked() {
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01):"), QLineEdit::Normal, "", &ok);
+    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
-        QStringList coordinates = text.split(",");
-        std::list<Cell*> cells;
-
-        for (const QString& coord : coordinates) {
-            int row = coord[0].digitValue();
-            int col = coord[1].digitValue();
-            cells.push_back(spreadsheet->getCell(row, col));
-        }
-
+        std::list<Cell*> cells = getCoordinates(text);
         auto* formula = new Max(spreadsheet->getSelectedCell());
         for (Cell* cell : cells) {
             formula->addCell(cell);
@@ -119,17 +135,9 @@ void UserInterface::onMaxClicked() {
 
 void UserInterface::onMinClicked() {
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01):"), QLineEdit::Normal, "", &ok);
+    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
-        QStringList coordinates = text.split(",");
-        std::list<Cell*> cells;
-
-        for (const QString& coord : coordinates) {
-            int row = coord[0].digitValue();
-            int col = coord[1].digitValue();
-            cells.push_back(spreadsheet->getCell(row, col));
-        }
-
+        std::list<Cell*> cells = getCoordinates(text);
         auto* formula = new Min(spreadsheet->getSelectedCell());
         for (Cell* cell : cells) {
             formula->addCell(cell);
@@ -140,17 +148,9 @@ void UserInterface::onMinClicked() {
 
 void UserInterface::onFormulaClicked(Formula *formula) {
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01):"), QLineEdit::Normal, "", &ok);
+    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
-        QStringList coordinates = text.split(",");
-        std::list<Cell*> cells;
-
-        for (const QString& coord : coordinates) {
-            int row = coord[0].digitValue();
-            int col = coord[1].digitValue();
-            cells.push_back(spreadsheet->getCell(row, col));
-        }
-
+        std::list<Cell*> cells = getCoordinates(text);
         //auto* formula = new Sum(spreadsheet->getSelectedCell());
         for (Cell* cell : cells) {
             formula->addCell(cell);
