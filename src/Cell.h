@@ -8,7 +8,7 @@
 
 class Formula; // Forward declaration
 
-class Cell :public Subject, public QTableWidgetItem {
+class Cell :public Subject, public QTableWidgetItem { // TODO: check if we need to implement a check for circular references
 public:
     Cell();
     explicit Cell(double v);
@@ -19,6 +19,9 @@ public:
 
     void setFormula(Formula *formula);
     [[nodiscard]] Formula *getFormula() const;
+
+    bool hasFormula() const;
+
     void resetCell();
 
     void notify() override;

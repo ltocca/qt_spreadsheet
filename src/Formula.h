@@ -24,6 +24,7 @@ public:
 
     void addCell (Cell* cell);
     void removeCell (Cell* cell);
+    void clearCell (Cell* cell);
 
     virtual void calculate()=0;
 

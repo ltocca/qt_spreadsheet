@@ -1,8 +1,6 @@
 #include "Spreadsheet.h"
 
 Spreadsheet::Spreadsheet(int rows, int columns, QWidget *parent): QTableWidget(rows, columns, parent){
-    //setRowCount(10);
-    //setColumnCount(10);
     for (int row = 0; row < rows; row++) {
         for (int column = 0; column < columns; column++) {
             auto *cell = new Cell();

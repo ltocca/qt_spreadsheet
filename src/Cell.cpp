@@ -1,5 +1,7 @@
 #include "Cell.h"
 
+#include "Formula.h"
+
 
 Cell::Cell() {
     QTableWidgetItem::setData(0,0.00);
@@ -26,14 +28,25 @@ Formula * Cell::getFormula() const {
     return insertedFormula;
 }
 
+bool Cell::hasFormula() const {
+    bool f = false;
+    if (insertedFormula != nullptr) {
+        f = true;
+    }
+    return f;
+}
+
 void Cell::resetCell(){
-    setData(0,0.00);
-    insertedFormula = nullptr;
+    setData(0, 0);
+    observers.clear();
+
 }
 
 void Cell::notify() {
-    for (const auto ob:observers)
-        ob->update();
+    if (!observers.empty()) {
+        for (const auto ob:observers)
+            ob->update();
+    }
 }
 
 void Cell::subscribe(Observer *o) {

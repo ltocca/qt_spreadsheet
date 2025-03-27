@@ -24,6 +24,7 @@ class UserInterface final : public QMainWindow
     Q_OBJECT
 public:
     explicit UserInterface(QWidget *parent = nullptr);
+    ~UserInterface() override;
 
 private slots:
     void onFormulaClicked(Formula *formula);
@@ -34,6 +35,7 @@ private:
     QPushButton *button2;
     QPushButton *button3;
     QPushButton *button4;
+    QPushButton *button5;
 
     //void createMenu();
     void createToolbar();
@@ -41,12 +43,9 @@ private:
 
     // TODO: Improve onFormulaClicked
 
-    std::list<Cell*> getCoordinates(const QString& text); // handles cells "selection"
+    [[nodiscard]] std::list<Cell*> getCoordinates(const QString& text) const; // handles cells "selection"
 
-    void onSumClicked();
-    void onMaxClicked();
-    void onMinClicked();
-    void onMeanClicked();
+    void onResetClicked();
 
 };
 

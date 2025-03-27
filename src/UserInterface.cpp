@@ -6,6 +6,18 @@ UserInterface::UserInterface(QWidget *parent) : QMainWindow(parent)
     createCentralWidget();
 }
 
+UserInterface::~UserInterface() {
+    for (int row = 0; row < spreadsheet->rowCount(); ++row) {
+        for (int col = 0; col < spreadsheet->columnCount(); ++col) {
+            if (const Cell* cell = spreadsheet->getCell(row, col)) {
+                if (cell->hasFormula()) {
+                    const auto* f = cell->getFormula();
+                    delete f;
+                }
+            }
+        }
+    }
+}
 
 void UserInterface::createToolbar()
 {
@@ -24,12 +36,15 @@ void UserInterface::createToolbar()
     button4 = new QPushButton("Mean");
     toolBar->addWidget(button4);
 
-    connect(button1, &QPushButton::clicked, this, [this]() {auto* formula = new Sum(spreadsheet->getSelectedCell()); onFormulaClicked(formula); }, Qt::QueuedConnection);
+    button5 = new QPushButton("Reset");
+    toolBar->addWidget(button5);
 
-	//connect(button1, &QPushButton::clicked, this, &UserInterface::onSumClicked);
-	connect(button2, &QPushButton::clicked, this, &UserInterface::onMaxClicked);
-	connect(button3, &QPushButton::clicked, this, &UserInterface::onMinClicked);
-	connect(button4, &QPushButton::clicked, this, &UserInterface::onMeanClicked);
+    connect(button1, &QPushButton::clicked, this, [this] {auto* formula = new Sum(spreadsheet->getSelectedCell()); onFormulaClicked(formula); }, Qt::QueuedConnection);
+    connect(button2, &QPushButton::clicked, this, [this] {auto* formula = new Max(spreadsheet->getSelectedCell()); onFormulaClicked(formula); }, Qt::QueuedConnection);
+    connect(button3, &QPushButton::clicked, this, [this] {auto* formula = new Min(spreadsheet->getSelectedCell()); onFormulaClicked(formula); }, Qt::QueuedConnection);
+    connect(button4, &QPushButton::clicked, this, [this] {auto* formula = new Mean(spreadsheet->getSelectedCell()); onFormulaClicked(formula); }, Qt::QueuedConnection);
+
+    connect(button5, &QPushButton::clicked, this, &UserInterface::onResetClicked);
 }
 
 void UserInterface::createCentralWidget()
@@ -54,7 +69,7 @@ void UserInterface::createCentralWidget()
     layout->addWidget(spreadsheet);
 }
 
-std::list<Cell*> UserInterface::getCoordinates(const QString& text) {
+std::list<Cell*> UserInterface::getCoordinates(const QString& text) const {
     const QRegularExpression delimiter("[,:]");
     bool hasComma = text.contains(",");
     bool hasColon = text.contains(":");
@@ -93,68 +108,27 @@ std::list<Cell*> UserInterface::getCoordinates(const QString& text) {
 
 }
 
-void UserInterface::onSumClicked() {
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty()) {
-        std::list<Cell*> cells = getCoordinates(text);
-
-        auto* formula = new Sum(spreadsheet->getSelectedCell());
-        for (Cell* cell : cells) {
-            formula->addCell(cell);
-        }
-        formula->calculate();
-    }
-}
-
-void UserInterface::onMeanClicked() {
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty()) {
-        std::list<Cell*> cells = getCoordinates(text);
-        auto* formula = new Mean(spreadsheet->getSelectedCell());
-        for (Cell* cell : cells) {
-            formula->addCell(cell);
-        }
-        formula->calculate();
-    }
-}
-
-void UserInterface::onMaxClicked() {
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty()) {
-        std::list<Cell*> cells = getCoordinates(text);
-        auto* formula = new Max(spreadsheet->getSelectedCell());
-        for (Cell* cell : cells) {
-            formula->addCell(cell);
-        }
-        formula->calculate();
-    }
-}
-
-void UserInterface::onMinClicked() {
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty()) {
-        std::list<Cell*> cells = getCoordinates(text);
-        auto* formula = new Min(spreadsheet->getSelectedCell());
-        for (Cell* cell : cells) {
-            formula->addCell(cell);
-        }
-        formula->calculate();
-    }
-}
-
 void UserInterface::onFormulaClicked(Formula *formula) {
     bool ok;
     QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
-        std::list<Cell*> cells = getCoordinates(text);
-        //auto* formula = new Sum(spreadsheet->getSelectedCell());
-        for (Cell* cell : cells) {
+        for (const std::list<Cell*> cells = getCoordinates(text); Cell* cell : cells) {
             formula->addCell(cell);
+            cell->setFormula(formula);
         }
         formula->calculate();
     }
+    Cell* cell = spreadsheet->getSelectedCell();
+    cell->setFormula(formula);
+}
+
+void UserInterface::onResetClicked() { // TODO: check if is needed to keep the cell in the formula if the selected cell is not a "formula".
+    Cell* cell = spreadsheet->getSelectedCell();
+    if (!cell) return;
+    cell->resetCell();
+    if (cell->hasFormula()) {
+        auto* f = cell->getFormula();
+        delete f;
+    }
+
 }
