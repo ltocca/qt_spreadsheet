@@ -12,22 +12,33 @@ void Formula::update() {
 
 
 void Formula::addCell(Cell* cell) {
-    if (cell == this->formulaCell || cell == nullptr)
+    // Don't add null cells or the formula's own cell
+    if (cell == nullptr || cell == this->formulaCell)
         return;
 
-    // we need to find the cell in the list: we use a lambda function to define a pointer which will be eventually find by the get() method
+    // to use this bool variable we need to use C++20!!
+    // we need to find the cell in the list: we use a bool function to define a pointer which will be eventually find by the get() method
+    // any_of check if unary predicate is equal to a shared pointer
+    // const bool cellExists = std::ranges::any_of(involvedCells,[cell](const auto& ptr) {return ptr.get() == cell;});
 
-    auto c = std::find_if(involvedCells.begin(), involvedCells.end(),
-                          [cell](const std::shared_ptr<Cell>& ptr) {
-                              return ptr.get() == cell;
-                          });
-
-    // at this moment, if the pointer IS NOT on the list, we can add it to the list, while creating the shared pointer first.
-
-    if (c == involvedCells.end()) {
-        std::shared_ptr<Cell> sharedCell(std::shared_ptr<Cell>(), cell);
-        involvedCells.push_back(sharedCell);
+    // Only add cell if it's not already in the list
+    if (!cellInvolved(*cell)) {
+        // Create a non-owning shared_ptr (observer pointer)
+        const std::shared_ptr<Cell> cellPtr(std::shared_ptr<Cell>(), cell);
+        involvedCells.push_back(cellPtr);
         cell->subscribe(this);
     }
+
     update();
+}
+
+bool Formula::cellInvolved(const Cell &cell) const {
+    bool involved = false;
+    for (auto& ic : involvedCells) {
+        if (ic.get() == &cell) {
+            involved = true;
+            break;
+        }
+    }
+    return involved;
 }

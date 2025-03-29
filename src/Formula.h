@@ -23,8 +23,7 @@ public:
     //void detach() override;
 
     void addCell (Cell* cell);
-    void removeCell (Cell* cell);
-    void clearCell (Cell* cell);
+    bool cellInvolved(const Cell& cell) const;
 
     virtual void calculate()=0;
 
