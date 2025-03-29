@@ -50,15 +50,25 @@ void UserInterface::createToolbar()
 void UserInterface::createCentralWidget()
 {
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Enter Spreadsheet Dimensions:"), tr("Number of rows and columns (comma-separated, e.g., 10,5):"), QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty()) {
-        QStringList coordinates = text.split(",");
-            spreadsheet = new Spreadsheet(coordinates[0].toInt(), coordinates[1].toInt());
-
+    QString text;
+    do {
+        text = QInputDialog::getText(this, tr("Enter Spreadsheet Dimensions:"), tr("Number of rows and columns (comma-separated, e.g., 10,5):"), QLineEdit::Normal, "", &ok);
+        if (ok && !text.isEmpty()) {
+            QStringList coordinates = text.split(",");
+            const int rows = coordinates[0].toInt();
+            const int columns = coordinates[1].toInt();
+            if (rows <= 0 || columns <= 0){
+                QMessageBox::critical(nullptr, "Error", "Both values MUST be positive! Try again");
+            }
+            else {
+                spreadsheet = new Spreadsheet(rows, columns);
+                break;
+            }
         }
-    else if (text.isEmpty()) {
-
-    }
+        else if (ok && text.isEmpty()) {
+            QMessageBox::critical(nullptr, "Error", "Nothing was inserted!");
+        }
+    } while (ok);
     //spreadsheet = new Spreadsheet(rows, cols);
     auto *centralWidget = new QWidget;
     setCentralWidget(centralWidget);
@@ -71,8 +81,8 @@ void UserInterface::createCentralWidget()
 
 std::list<Cell*> UserInterface::getCoordinates(const QString& text) const {
     const QRegularExpression delimiter("[,:]");
-    bool hasComma = text.contains(",");
-    bool hasColon = text.contains(":");
+    const bool hasComma = text.contains(",");
+    const bool hasColon = text.contains(":");
     std::list<Cell*> cells;
     if (hasComma && !hasColon) {
         QStringList coordinates = text.split(",");
@@ -85,10 +95,10 @@ std::list<Cell*> UserInterface::getCoordinates(const QString& text) const {
     else if (!hasComma && hasColon) {
         QStringList coordinates = text.split(":");
         if (coordinates.size() == 2 && coordinates[0].size()>=2 && coordinates[1].size()>=2) {
-            int firstRow = coordinates[0][0].digitValue();
-            int firstCol = coordinates[0][1].digitValue();
-            int lastRow = coordinates[1][0].digitValue();
-            int lastCol = coordinates[1][1].digitValue();
+            const int firstRow = coordinates[0][0].digitValue();
+            const int firstCol = coordinates[0][1].digitValue();
+            const int lastRow = coordinates[1][0].digitValue();
+            const int lastCol = coordinates[1][1].digitValue();
 
             if (firstRow > lastRow || firstCol > lastCol) {
                 // TODO: row and column dimension error handling
@@ -122,12 +132,12 @@ void UserInterface::onFormulaClicked(Formula *formula) {
     cell->setFormula(formula);
 }
 
-void UserInterface::onResetClicked() { // TODO: check if is needed to keep the cell in the formula if the selected cell is not a "formula".
+void UserInterface::onResetClicked() const { // TODO: check if is needed to keep the cell in the formula if the selected cell is not a "formula".
     Cell* cell = spreadsheet->getSelectedCell();
     if (!cell) return;
     cell->resetCell();
     if (cell->hasFormula()) {
-        auto* f = cell->getFormula();
+        const auto* f = cell->getFormula();
         delete f;
     }
 

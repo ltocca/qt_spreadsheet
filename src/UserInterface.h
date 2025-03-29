@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <QVBoxLayout>
 #include <QMenuBar>
+#include <QMessageBox>
 #include <QMenu>
 #include <QAction>
 #include <QToolBar>
@@ -45,7 +46,7 @@ private:
 
     [[nodiscard]] std::list<Cell*> getCoordinates(const QString& text) const; // handles cells "selection"
 
-    void onResetClicked();
+    void onResetClicked() const;
 
 };
 
