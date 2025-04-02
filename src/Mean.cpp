@@ -13,3 +13,7 @@ void Mean::calculate() {
     double avg = sum / static_cast<double>(involvedCells.size());
     this->formulaCell->setData(0, avg);
 }
+
+QColor Mean::getColor() const {
+    return {253, 253, 91};
+}

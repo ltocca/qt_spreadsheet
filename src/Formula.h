@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "QColor"
 #include "Observer.h"
 #include "Cell.h"
 #include "list"
@@ -25,7 +26,8 @@ public:
     void addCell (Cell* cell);
     bool cellInvolved(const Cell& cell) const;
 
-    virtual void calculate()=0;
+    virtual void calculate() = 0;
+    virtual QColor getColor() const = 0;
 
 protected:
     Cell* formulaCell;

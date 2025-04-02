@@ -14,3 +14,8 @@ void Max::calculate() {
     }
     this->formulaCell->setData(0, max);
 }
+
+QColor Max::getColor() const {
+    return {40, 159, 40};
+}
+

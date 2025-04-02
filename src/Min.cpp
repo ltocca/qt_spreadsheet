@@ -14,3 +14,7 @@ void Min::calculate() {
     }
     this->formulaCell->setData(0, min);
 }
+
+QColor Min::getColor() const {
+    return {251, 99, 99};
+}

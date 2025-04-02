@@ -10,6 +10,7 @@ class Mean : public Formula {
 public:
   explicit Mean(Cell* cell) : Formula(cell) {}
   void calculate() override;
+  [[nodiscard]] QColor getColor() const override;
 };
 
 

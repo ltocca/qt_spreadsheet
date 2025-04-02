@@ -12,3 +12,7 @@ void Sum::calculate() {
     }
     this->formulaCell->setData(0, sum);
 }
+
+QColor Sum::getColor() const {
+    return {124, 124, 252}; // suggested by clang
+}

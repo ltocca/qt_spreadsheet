@@ -9,7 +9,7 @@ class Sum :public Formula {
 public:
     explicit Sum (Cell* cell) : Formula(cell) {}
     void calculate() override;
-
+    [[nodiscard]] QColor getColor() const override;
 };
 
 

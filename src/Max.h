@@ -10,6 +10,7 @@ class Max: public Formula {
 public:
     explicit Max(Cell* opCell) : Formula(opCell){}
     void calculate() override;
+    [[nodiscard]] QColor getColor() const override;
 };
 
 

@@ -38,6 +38,7 @@ bool Cell::hasFormula() const {
 
 void Cell::resetCell(){
     setData(0, 0);
+    setBackground(QBrush(QColor(255, 255, 255))); // reset cell color
     observers.clear();
 
 }
