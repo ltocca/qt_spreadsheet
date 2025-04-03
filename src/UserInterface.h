@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QInputDialog>
+#include <QRegularExpression>
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -42,9 +43,10 @@ private:
     void createToolbar();
     void createCentralWidget();
 
-    // TODO: Improve onFormulaClicked
+    bool comma_split(const QString &text, std::list<Cell *> & cells) const;
+    bool colon_split(const QString &text, std::list<Cell *> & cells) const;
 
-    [[nodiscard]] std::list<Cell*> getCoordinates(const QString& text) const; // handles cells "selection"
+    [[nodiscard]] std::pair<bool, std::list<Cell*>> getCoordinates(const QString& text) const; // handles cells "selection"
 
     void onResetClicked() const;
 

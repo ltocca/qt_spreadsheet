@@ -1,6 +1,6 @@
 #include "Spreadsheet.h"
 
-Spreadsheet::Spreadsheet(int rows, int columns, QWidget *parent): QTableWidget(rows, columns, parent){
+Spreadsheet::Spreadsheet(const int rows, const int columns, QWidget *parent): QTableWidget(rows, columns, parent){
     for (int row = 0; row < rows; row++) {
         for (int column = 0; column < columns; column++) {
             auto *cell = new Cell();
@@ -11,14 +11,14 @@ Spreadsheet::Spreadsheet(int rows, int columns, QWidget *parent): QTableWidget(r
 }
 
 Cell* Spreadsheet::getSelectedCell() const {
-    QModelIndex currentIndex = this->currentIndex();  // Get the currently selected index
+    const QModelIndex currentIndex = this->currentIndex();  // Get the currently selected index
     if (!currentIndex.isValid()) {
         return nullptr;  // No cell is selected
     }
     return dynamic_cast<Cell*>(this->item(currentIndex.row(), currentIndex.column()));
 }
 
-Cell * Spreadsheet::getCell(int row, int col) const {
+Cell * Spreadsheet::getCell(const int row, const int col) const {
     return dynamic_cast<Cell*>(this->item(row, col));
 }
 
