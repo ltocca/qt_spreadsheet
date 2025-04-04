@@ -25,6 +25,7 @@ public:
 
     void addCell (Cell* cell);
     bool cellInvolved(const Cell& cell) const;
+    static bool hasCircularReference(const Cell* fCell, const std::list<Cell*> &list) ;
 
     virtual void calculate() = 0;
     virtual QColor getColor() const = 0;

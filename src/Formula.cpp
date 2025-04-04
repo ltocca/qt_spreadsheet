@@ -31,7 +31,6 @@ void Formula::addCell(Cell* cell) {
 
     update();
 }
-
 bool Formula::cellInvolved(const Cell &cell) const {
     bool involved = false;
     for (auto& ic : involvedCells) {
@@ -41,4 +40,14 @@ bool Formula::cellInvolved(const Cell &cell) const {
         }
     }
     return involved;
+}
+
+bool Formula::hasCircularReference(const Cell *fCell, const std::list<Cell *> &list) {
+    bool circularReference = false;
+    for (const auto cell : list) {
+        if (cell == fCell) {
+            circularReference = true;
+        }
+    }
+    return circularReference;
 }

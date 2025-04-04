@@ -162,12 +162,15 @@ void UserInterface::onFormulaClicked(Formula *formula) {
         QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11):"), QLineEdit::Normal, "", &ok);
         if (ok && !text.isEmpty()) {
             const auto [finished, cells] = getCoordinates(text);
-            if (finished) {
+            if (finished && !Formula::hasCircularReference(spreadsheet->getSelectedCell(), cells)) {
                 for (Cell* cell : cells) {
                     formula->addCell(cell);
                 }
                 formula->calculate();
                 inputValid = finished;
+            }
+            else {
+                QMessageBox::critical(nullptr, "Error", "You can't add the selected cell into the formula!"); // Circular reference
             }
         }
         if (inputValid){
@@ -175,7 +178,6 @@ void UserInterface::onFormulaClicked(Formula *formula) {
         }
     }
     while (!inputValid && ok);
-    //cell->setBackground(QBrush(formula->getColor()));  // Blue
 }
 
 void UserInterface::onResetClicked() const {
