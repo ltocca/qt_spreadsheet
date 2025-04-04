@@ -117,7 +117,7 @@ bool UserInterface::colon_split(const QString &text, std::list<Cell *>& cells) c
             QMessageBox::critical(nullptr, "Error", "You have inserted a wrong interval! Try again");
             return finished;
         }
-        if (firstRow < 0 || firstCol < 0 || lastRow > spreadsheet->rowCount()) {
+        if (firstRow < 0 || firstCol < 0 || lastRow > spreadsheet->rowCount() || lastCol > spreadsheet->columnCount()) {
             QMessageBox::critical(nullptr, "Error", "Inserted cell indexes are out of range! Try again");
             return finished;
         }
@@ -147,10 +147,10 @@ std::pair<bool, std::list<Cell*>>  UserInterface::getCoordinates(const QString& 
         finished = colon_split(text, cells);
     }
     else if (hasBoth) {
-        QMessageBox::critical(nullptr, "Error", "You have inserted an unsupported interval! Try again");
+        QMessageBox::critical(nullptr, "Error", "You have inserted an unsupported interval (right now)! Try again");
     }
     else {
-        QMessageBox::critical(nullptr, "Error", "Please revise your coordinates! Remember that you can't insert single cells in a formula Try again");
+        QMessageBox::critical(nullptr, "Error", "Please revise your coordinates! Remember that you can't insert single cells in a formula! Try again");
     }
     return {finished, cells};
 }
@@ -159,7 +159,7 @@ void UserInterface::onFormulaClicked(Formula *formula) {
     bool ok;
     bool inputValid = false;
     do {
-        QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11:"), QLineEdit::Normal, "", &ok);
+        QString text = QInputDialog::getText(this, tr("Enter Cell Coordinates"), tr("Cells (comma-separated, e.g., 00,01) or an interval (colon-separated, e.g., 00:11):"), QLineEdit::Normal, "", &ok);
         if (ok && !text.isEmpty()) {
             const auto [finished, cells] = getCoordinates(text);
             if (finished) {
@@ -167,17 +167,18 @@ void UserInterface::onFormulaClicked(Formula *formula) {
                     formula->addCell(cell);
                 }
                 formula->calculate();
-                inputValid = true;
+                inputValid = finished;
             }
+        }
+        if (inputValid){
+            spreadsheet->getSelectedCell()->setFormula(formula); // connect the formula and the cell where is located
         }
     }
     while (!inputValid && ok);
-    Cell* cell = spreadsheet->getSelectedCell();
-    cell->setFormula(formula); // connect the formula and the cell where is located
-    cell->setBackground(QBrush(formula->getColor()));  // Blue
+    //cell->setBackground(QBrush(formula->getColor()));  // Blue
 }
 
-void UserInterface::onResetClicked() const { // TODO: check if is needed to keep the cell in the formula if the selected cell is not a "formula".
+void UserInterface::onResetClicked() const {
     Cell* cell = spreadsheet->getSelectedCell();
     if (!cell) return;
     if (cell->getFormula()==nullptr && cell->getData()==0.00) {

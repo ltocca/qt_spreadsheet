@@ -22,6 +22,7 @@ void Cell::setData(const int role, const QVariant &data) {
 
 void Cell::setFormula(Formula *formula) {
     insertedFormula = formula;
+    setBackground(QBrush(formula->getColor()));
 }
 
 Formula * Cell::getFormula() const {
