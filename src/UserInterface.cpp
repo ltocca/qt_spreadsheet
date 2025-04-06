@@ -117,7 +117,7 @@ bool UserInterface::colon_split(const QString &text, std::list<Cell *>& cells) c
             QMessageBox::critical(nullptr, "Error", "You have inserted a wrong interval! Try again");
             return finished;
         }
-        if (firstRow < 0 || firstCol < 0 || lastRow > spreadsheet->rowCount() || lastCol > spreadsheet->columnCount()) {
+        if (firstRow < 0 || firstCol < 0 || lastRow > spreadsheet->rowCount()-1 || lastCol > spreadsheet->columnCount()-1) {
             QMessageBox::critical(nullptr, "Error", "Inserted cell indexes are out of range! Try again");
             return finished;
         }
@@ -130,7 +130,8 @@ bool UserInterface::colon_split(const QString &text, std::list<Cell *>& cells) c
     else {
         QMessageBox::critical(nullptr, "Error", "You have inserted a wrong interval! Try again");
     }
-    return finished = true;
+    finished = true;
+    return finished;
 }
 
 std::pair<bool, std::list<Cell*>>  UserInterface::getCoordinates(const QString& text) const {
@@ -169,7 +170,7 @@ void UserInterface::onFormulaClicked(Formula *formula) {
                 formula->calculate();
                 inputValid = finished;
             }
-            else {
+            else if (!Formula::hasCircularReference(spreadsheet->getSelectedCell(), cells)) {
                 QMessageBox::critical(nullptr, "Error", "You can't add the selected cell into the formula!"); // Circular reference
             }
         }
