@@ -170,7 +170,7 @@ void UserInterface::onFormulaClicked(Formula *formula) {
                 formula->calculate();
                 inputValid = finished;
             }
-            else if (!Formula::hasCircularReference(spreadsheet->getSelectedCell(), cells)) {
+            else if (Formula::hasCircularReference(spreadsheet->getSelectedCell(), cells)) {
                 QMessageBox::critical(nullptr, "Error", "You can't add the selected cell into the formula!"); // Circular reference
             }
         }
