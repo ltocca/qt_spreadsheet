@@ -3,6 +3,7 @@
 //
 #include "gtest/gtest.h"
 #include "../src/Cell.h"
+#include "../src/Sum.h"
 #include <memory>
 
 // Test the Cell constructor and getData functionality
@@ -29,12 +30,16 @@ TEST(CellTest, SetData) {
 
 // Test the hasFormula method
 TEST(CellTest, HasFormula) {
-    Cell cell;
+    auto cell = new Cell();
     // Initially, a cell should have no formula
-    EXPECT_FALSE(cell.hasFormula());
+    EXPECT_FALSE(cell->hasFormula());
 
-    // We can't directly test setting a formula without a Formula implementation
-    // This would need to be tested in an integration test
+    auto f = new Sum(cell);
+    cell->setFormula(f);
+    EXPECT_TRUE(cell->hasFormula());
+
+    delete f;
+    delete cell;
 }
 
 // Test resetCell functionality
