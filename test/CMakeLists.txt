@@ -17,6 +17,7 @@ find_package(Qt5 COMPONENTS
         Core
         Gui
         Widgets
+        Test
         REQUIRED)
 
 # Source files from the main project
@@ -48,6 +49,7 @@ target_link_libraries(spreadsheet_test
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
+        Qt5::Test
 )
 
-enable_testing()
+enable_testing(true)
