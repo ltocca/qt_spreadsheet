@@ -2,6 +2,7 @@
 
 UserInterface::UserInterface(QWidget *parent) : QMainWindow(parent)
 {
+    setWindowTitle("Spreadsheet");
     createToolbar();
     createCentralWidget();
 }
@@ -58,7 +59,7 @@ void UserInterface::createCentralWidget()
     QString text;
     do {
         text = QInputDialog::getText(this, tr("Enter Spreadsheet Dimensions (max 10 rows and 10 columns):"), tr("Number of rows and columns (comma-separated, e.g., 10,5):"), QLineEdit::Normal, "", &ok);
-        if (ok && !text.isEmpty()) {
+        if (ok && !text.isEmpty() && text.contains(",")) {
             QStringList coordinates = text.split(",");
             const int rows = coordinates[0].toInt();
             const int columns = coordinates[1].toInt();
@@ -72,6 +73,9 @@ void UserInterface::createCentralWidget()
                 spreadsheet = new Spreadsheet(rows, columns);
                 break;
             }
+        }
+        else if (ok && !text.isEmpty() && !text.contains(",")) {
+            QMessageBox::critical(nullptr, "Error!", "Wrong formula insertion");
         }
         else if (ok && text.isEmpty()) {
             QMessageBox::critical(nullptr, "Error", "Nothing was inserted!");
@@ -170,8 +174,8 @@ void UserInterface::onFormulaClicked(Formula *formula) {
                 formula->calculate();
                 inputValid = finished;
             }
-            else if (!Formula::hasCircularReference(spreadsheet->getSelectedCell(), cells)) {
-                QMessageBox::critical(nullptr, "Error", "You can't add the selected cell into the formula!"); // Circular reference
+            else if (Formula::hasCircularReference(spreadsheet->getSelectedCell(), cells)) {
+                QMessageBox::critical(nullptr, "Error", "You can't add the selected cell into the formula, it will generate a circular reference!"); // Circular reference
             }
         }
         if (inputValid){
