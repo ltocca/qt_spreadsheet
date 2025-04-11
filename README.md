@@ -16,16 +16,16 @@ Progetto per Laboratorio di Programmazione - Foglio di Calcolo in QT
 
 - Inserimento dimensione foglio di calcolo
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/dimension_insertion.png)
+![](docs/img/dimension_insertion.png)
 
 - Foglio vuoto
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/default_view.png)
+![](docs/img/default_view.png)
 
 - Inserimento formula
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/formula_insertion.png)
+![](docs/img/formula_insertion.png)
 
 - Formule inserite
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/inserted_formulas.png)
+![](docs/img/inserted_formulas.png)

@@ -15,16 +15,16 @@ A simple Qt and C++ spreadsheet with sum, minimum, maxiumum and mean formulas.
 
 - Insert spreadsheet dimensions
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/dimension_insertion.png)
+![](/docs/img/dimension_insertion.png)
 
 - Empty spreadsheet
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/default_view.png)
+![](/docs/img/default_view.png)
 
 - Insert formula
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/formula_insertion.png)
+![](/docs/img/formula_insertion.png)
 
 - Inserted formulas
 
-![](/media/leo/SSD/Materiale/PrimoAnno/LaboratoriodiProgrammazione/qt-spreadsheet/docs/img/inserted_formulas.png)
+![](/docs/img/inserted_formulas.png)
