@@ -33,7 +33,8 @@ add_executable(qt_spreadsheet main.cpp
         src/Spreadsheet.cpp
         src/Spreadsheet.h
         src/UserInterface.cpp
-        src/UserInterface.h)
+        src/UserInterface.h
+        src/version.h)
 target_link_libraries(qt_spreadsheet
         Qt5::Core
         Qt5::Gui

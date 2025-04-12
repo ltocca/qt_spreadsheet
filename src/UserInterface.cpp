@@ -1,8 +1,9 @@
 #include "UserInterface.h"
+#include "version.h"
 
 UserInterface::UserInterface(QWidget *parent) : QMainWindow(parent)
 {
-    setWindowTitle("Spreadsheet");
+    setWindowTitle("Spreadsheet v" + QString::fromStdString(VERSION));
     createToolbar();
     createCentralWidget();
 }
