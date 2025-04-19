@@ -38,18 +38,20 @@ set(SOURCE_FILES
 set(    TEST_SOURCE_FILES
         runAllTests.cpp
         SumTest.cpp
-        CellTest.cpp
         MeanTest.cpp
+        MaxTest.cpp
         MinTest.cpp
+        CellTest.cpp
         SpreadsheetTest.cpp
         UITest.cpp
-        MockObserver.cpp
+        MockObserver.h
 )
 
 add_executable(spreadsheet_test ${TEST_SOURCE_FILES} ${SOURCE_FILES})
 target_link_libraries(spreadsheet_test
         gtest
         gtest_main
+        gmock
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
