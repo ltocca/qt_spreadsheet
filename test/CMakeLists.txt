@@ -11,7 +11,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
 add_subdirectory(.lib/googletest)
 set(gtest_SOURCE_DIR .lib/googletest)
+set(gmock_SOURCE_DIR .lib/googletest/googlemock)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
+
 
 find_package(Qt5 COMPONENTS
         Core
@@ -40,6 +43,7 @@ set(    TEST_SOURCE_FILES
         MinTest.cpp
         SpreadsheetTest.cpp
         UITest.cpp
+        MockObserver.cpp
 )
 
 add_executable(spreadsheet_test ${TEST_SOURCE_FILES} ${SOURCE_FILES})
